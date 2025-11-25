@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <item>
-  <version>1.0.3</version>
-  <url>https://github.com/Mikzeer/UpdatePluma/raw/refs/heads/main/PlumaSystem.zip</url>
+  <version>1.0.0.2</version>
+  <url>https://raw.githubusercontent.com/Mikzeer/UpdatePluma/refs/heads/main/PlumaSystem.zip</url>
   <changelog>Prueba Inicial</changelog>
   <mandatory>false</mandatory>
 </item>
