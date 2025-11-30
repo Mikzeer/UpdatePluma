@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <item>
-  <version>2.0.3.5</version>
+  <version>1.0.0.4</version>
   <url>https://github.com/Mikzeer/UpdatePluma/releases/download/V1.0.0.3/PlumaSystem.zip</url>
   <changelog>https://github.com/Mikzeer/UpdatePluma/releases</changelog>
   <mandatory>false</mandatory>
