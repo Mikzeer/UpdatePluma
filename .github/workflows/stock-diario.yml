@@ -1,0 +1,53 @@
+name:  Registrar Stock Diario de Combustible
+
+on:
+  #  Se ejecuta todos los días a las 03:01 UTC = 00:01 Argentina
+  schedule:
+    - cron: '1 3 * * *'
+
+  # Permite ejecutar manualmente (para probar)
+  workflow_dispatch:
+
+jobs:
+  registrar-stock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🕒 Fecha actual (logs)
+        id: fecha
+        run: echo "hoy=$(date +'%Y-%m-%d %H:%M:%S %Z')" >> $GITHUB_ENV
+
+      - name:  Llamar a Supabase RPC
+        run: |
+          echo " Ejecutando job a las ${{ env.hoy }} (UTC)"
+          echo " Registrando stock diario..."
+
+          # Llamada a Supabase
+          response=$(curl -s -w "%{http_code}" \
+            -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/rpc/registrar_stock_diario" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"p_secret\":\"${{ secrets.STOCK_SECRET }}\"}")
+
+          # Extraer código HTTP y cuerpo
+          http_code="${response: -3}"
+          body="${response%???}"
+
+          echo "::group:: Detalles de la respuesta"
+          echo "Código HTTP: $http_code"
+          echo "Cuerpo: [$body]"
+          echo "::endgroup::"
+
+          if [ "$http_code" = "204" ]; then
+            echo " Éxito: stock registrado correctamente."
+          elif [ "$http_code" = "403" ] || [ "$http_code" = "401" ]; then
+            echo " Error de autenticación: revisar SUPABASE_ANON_KEY o STOCK_SECRET"
+            exit 1
+          else
+            echo " Error HTTP $http_code: $body"
+            exit 1
+          fi
+
+      - name:  Finalizado
+        if: success()
+        run: echo " Job completado."
