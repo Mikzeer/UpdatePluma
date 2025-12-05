@@ -23,7 +23,7 @@ jobs:
 
           # Llamada a Supabase
           response=$(curl -s -w "%{http_code}" \
-            -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/rpc/registrar_stock_diario" \
+            -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/rpc/registrar_stock_inicial_diario" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Content-Type: application/json" \
